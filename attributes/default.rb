@@ -1,4 +1,5 @@
 default[:unjava][:package_action] = :nothing
+default[:unjava][:undo_action] = :install
 default[:unjava][:resources] = [
   'java_alternatives[set-java-alternatives]',
   'ruby_block[set-env-java-home]',

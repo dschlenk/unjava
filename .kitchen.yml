@@ -10,16 +10,34 @@ platforms:
   - name: ubuntu-14.04
   - name: centos-5.11
   - name: centos-6.6
-  - name: centos-7.1
+  - name: centos-7.0
   - name: debian-6.0.10
   - name: debian-7.8
   - name: fedora-20
   - name: fedora-21
   - name: freebsd-9.3
+    driver:
+      ssh:
+        shell: '"/bin/sh"'
   - name: freebsd-10.1
+    driver:
+      ssh:
+        shell: '"/bin/sh"'
+
 suites:
   - name: default
     run_list:
       - recipe[java::default]
       - recipe[unjava::default]
     attributes:
+    excludes:
+      - freebsd-9.3
+      - freebsd-10.1
+  - name: bsdefault
+    run_list:
+      - recipe[java::default]
+      - recipe[unjava::default]
+    attributes:
+    includes:
+      - freebsd-9.3
+      - freebsd-10.1

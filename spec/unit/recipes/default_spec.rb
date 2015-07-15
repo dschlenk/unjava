@@ -22,7 +22,7 @@ require 'spec_helper'
 describe 'unjava::default' do
   context 'When all attributes are default, on an unspecified platform' do
     let(:chef_run) do
-      runner = ChefSpec::Runner.new
+      runner = ChefSpec::SoloRunner.new
       runner.converge(described_recipe)
     end
 
@@ -103,9 +103,9 @@ describe 'unjava::default' do
   }
   platforms.each do |platform, value|
     os, ver = platform.split '-'
-    context "When all attributes are default, on #{platform} platform" do
+    context "When all attributes are default, on #{platform} platform with java and unjava in the run list" do
       let(:chef_run) do
-        runner = ChefSpec::Runner.new(platform: os, version: ver)
+        runner = ChefSpec::SoloRunner.new(platform: os, version: ver)
         runner.converge('role[java_unjava]')
       end
 
@@ -114,6 +114,19 @@ describe 'unjava::default' do
         value['packages'].each do |p|
           jdk = chef_run.package(p)
           expect(jdk).to do_nothing
+        end
+      end
+    end
+    context "When all attributes are default, on #{platform} platform with java, unjava, and rejava in the run list" do
+      let(:chef_run) do
+        runner = ChefSpec::SoloRunner.new(platform: os, version: ver)
+        runner.converge('role[java_unjava_java]')
+      end
+
+      it 'does install java' do
+        # assert openjdk packages not installed
+        value['packages'].each do |p|
+          expect(chef_run).to install_package(p)
         end
       end
     end
