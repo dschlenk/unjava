@@ -1,0 +1,7 @@
+name 'unjava'
+maintainer 'Spanlink Communications, Inc.'
+maintainer_email 'dschlenk@converge-one.com'
+license 'apache2'
+description 'Installs/Configures unjava'
+long_description 'Installs/Configures unjava'
+version '0.1.0'
