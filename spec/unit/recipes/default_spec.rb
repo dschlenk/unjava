@@ -33,25 +33,89 @@ describe 'unjava::default' do
     end
 
   end
-  context 'When all attributes are default, on centos platform' do
-    let(:chef_run) do
-      runner = ChefSpec::Runner.new(platform: 'centos', version: '5.11') do |node|
-#        node.set[:unjava][:resources] = [
-#            'java_alternatives[set-java-alternatives]',
-#            'ruby_block[set-env-java-home]',
-#            'directory[/etc/profile.d]',
-#            'file[/etc/profile.d/jdk.sh]'
-#        ]
+  deb_pkgs = ['openjdk-6-jdk', 'openjdk-6-jre-headless']
+  rhel_pkgs = ['java-1.6.0-openjdk', 'java-1.6.0-openjdk-devel']
+  bsd_pkgs = ['openjdk6']
+  platforms = {
+    'ubuntu-12.04' => {
+      'packages' => deb_pkgs
+    },
+    'ubuntu-14.04' => {
+      'packages' => deb_pkgs
+    },
+    'debian-6.0.5' => {
+      'packages' => deb_pkgs
+    },
+    'debian-7.8' => {
+      'packages' => deb_pkgs
+    },
+    'centos-5.8' => {
+      'packages' => rhel_pkgs
+    },
+    'centos-5.9' => {
+      'packages' => rhel_pkgs
+    },
+    'centos-5.10' => {
+      'packages' => rhel_pkgs
+    },
+    'centos-5.11' => {
+      'packages' => rhel_pkgs
+    },
+    'centos-6.0' => {
+      'packages' => rhel_pkgs
+    },
+    'centos-6.3' => {
+      'packages' => rhel_pkgs
+    },
+    'centos-6.4' => {
+      'packages' => rhel_pkgs
+    },
+    'centos-6.5' => {
+      'packages' => rhel_pkgs
+    },
+    'centos-6.6' => {
+      'packages' => rhel_pkgs
+    },
+    'centos-7.0' => {
+      'packages' => rhel_pkgs
+    },
+    'centos-7.1.1503' => {
+      'packages' => rhel_pkgs
+    },
+    'fedora-20' => {
+      'packages' => rhel_pkgs
+    },
+    'fedora-21' => {
+      'packages' => rhel_pkgs
+    },
+    'freebsd-8.4' => {
+      'packages' => bsd_pkgs
+    },
+    'freebsd-9.1' => {
+      'packages' => bsd_pkgs
+    },
+    'freebsd-9.2' => {
+      'packages' => bsd_pkgs
+    },
+    'freebsd-10.0' => {
+      'packages' => bsd_pkgs
+    }
+  }
+  platforms.each do |platform, value|
+    os, ver = platform.split '-'
+    context "When all attributes are default, on #{platform} platform" do
+      let(:chef_run) do
+        runner = ChefSpec::Runner.new(platform: os, version: ver)
+        runner.converge('role[java_unjava]')
       end
-      runner.converge('role[java_unjava]')
-    end
 
-    it 'does not install java' do
-      # assert openjdk packages not installed
-      jdk = chef_run.package('java-1.6.0-openjdk')
-      expect(jdk).to do_nothing
-      jdk_devel = chef_run.package('java-1.6.0-openjdk-devel')
-      expect(jdk_devel).to do_nothing
+      it 'does not install java' do
+        # assert openjdk packages not installed
+        value['packages'].each do |p|
+          jdk = chef_run.package(p)
+          expect(jdk).to do_nothing
+        end
+      end
     end
   end
 end

@@ -34,7 +34,7 @@ when 'debian', 'rhel', 'fedora', 'freebsd'
     begin
       unwind r
     rescue
-      Chef::Log.warn "Unable to unwind resource #{r}."
+      Chef::Log.warn "Unable to unwind resource #{r} on #{node[:platform]}."
     end
   end
 else
