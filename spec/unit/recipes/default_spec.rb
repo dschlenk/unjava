@@ -3,19 +3,18 @@
 # Spec:: default
 #
 # Copyright 2015 Spanlink Communications, Inc.
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 
 require 'spec_helper'
 
@@ -27,11 +26,10 @@ describe 'unjava::default' do
     end
 
     it 'converges unsuccessfully' do
-      expect{
+      expect do
         chef_run
-      }.to raise_error # This should raise an error
+      end.to raise_error # This should raise an error
     end
-
   end
   deb_pkgs = ['openjdk-6-jdk', 'openjdk-6-jre-headless']
   rhel_pkgs = ['java-1.6.0-openjdk', 'java-1.6.0-openjdk-devel']
